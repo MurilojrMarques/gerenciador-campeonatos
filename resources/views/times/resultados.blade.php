@@ -1,45 +1,67 @@
+<!-- resources/views/times/resultados.blade.php -->
+
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-        <h1>Resultados das Quartas de Final</h1>
+<div class="bracket">
+    <!-- Quartas de Final -->
+    <div class="bracket-column">
+        <div class="block match-type">
+            Quartas de Final
+        </div>
 
-        <h2>Confrontos das Quartas de Final</h2>
-        <ul>
-            @foreach ($placaresQuartas as $placar)
-                <li>{{ $placar['time_casa'] }} {{ $placar['placar_casa'] }} - {{ $placar['placar_visitante'] }} {{ $placar['time_visitante'] }}</li>
-            @endforeach
-        </ul>
-
-        <h2>Vencedores das Quartas de Final</h2>
-        <ul>
-            @foreach ($vencedoresQuartas as $vencedor)
-                <li>{{ $vencedor }}</li>
-            @endforeach
-        </ul>
-
-        <h2>Confrontos das Semifinais</h2>
-        <ul>
-            @foreach ($placaresSemifinal as $placar)
-                <li>{{ $placar['time_casa'] }} {{ $placar['placar_casa'] }} - {{ $placar['placar_visitante'] }} {{ $placar['time_visitante'] }}</li>
-            @endforeach
-        </ul>
-
-        <h2>Vencedores das Semifinais</h2>
-        <ul>
-            @foreach ($vencedoresSemifinal as $vencedor)
-                <li>{{ $vencedor }}</li>
-            @endforeach
-        </ul>
-
-        <h2>Confronto Final</h2>
-        <ul>
-            @foreach ($placaresFinal as $placar)
-                <li>{{ $placar['time_casa'] }} {{ $placar['placar_casa'] }} - {{ $placar['placar_visitante'] }} {{ $placar['time_visitante'] }}</li>
-            @endforeach
-        </ul>
-
-        <h2>Vencedor Final</h2>
-        <p>{{ $vencedorFinal }}</p>
+        @foreach($placaresQuartas as $match)
+        <div class="match">
+            <div class="block team">
+                {{ $match['time_casa'] }}
+                <div class="score">{{ $match['placar_casa'] }}</div>
+            </div>
+            <div class="block team">
+                {{ $match['time_visitante'] }}
+                <div class="score">{{ $match['placar_visitante'] }}</div>
+            </div>
+        </div>
+        @endforeach
     </div>
+
+    <!-- Semifinais -->
+    <div class="bracket-column">
+        <div class="block match-type">
+            Semifinal
+        </div>
+
+        @foreach($placaresSemifinal as $match)
+        <div class="match">
+            <div class="block team">
+                {{ $match['time_casa'] }}
+                <div class="score">{{ $match['placar_casa'] }}</div>
+            </div>
+            <div class="block team">
+                {{ $match['time_visitante'] }}
+                <div class="score">{{ $match['placar_visitante'] }}</div>
+            </div>
+        </div>
+        @endforeach
+    </div>
+
+    <!-- Finais -->
+    <div class="bracket-column">
+        <div class="block match-type">
+            Final
+        </div>
+
+        @foreach($placaresFinal as $match)
+        <div class="match">
+            <div class="block team">
+                {{ $match['time_casa'] }}
+                <div class="score">{{ $match['placar_casa'] }}</div>
+            </div>
+            <div class="block team">
+                {{ $match['time_visitante'] }}
+                <div class="score">{{ $match['placar_visitante'] }}</div>
+            </div>
+        </div>
+        @endforeach
+    </div>
+</div>
 @endsection
