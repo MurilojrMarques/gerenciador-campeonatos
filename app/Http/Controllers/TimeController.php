@@ -37,18 +37,15 @@ class TimeController extends Controller
 
     public function sortearConfrontos()
     {
-        // Instanciar os controladores de cada fase
         $quartasFinalController = new QuartasFinalController();
         $semifinalController = new SemifinalController();
         $finalController = new FinalController();
 
-        // Quartas de final
+
         list($placaresQuartas, $vencedoresQuartas) = $quartasFinalController->gerarQuartas();
 
-        // Semifinais
         list($placaresSemifinal, $vencedoresSemifinal) = $semifinalController->gerarSemifinais($vencedoresQuartas);
 
-        // Finais
         list($placaresFinal, $vencedorFinal) = $finalController->gerarFinais($vencedoresSemifinal);
 
         return view('times.resultados', compact('placaresQuartas', 'vencedoresQuartas', 'placaresSemifinal', 'vencedoresSemifinal', 'placaresFinal', 'vencedorFinal'));

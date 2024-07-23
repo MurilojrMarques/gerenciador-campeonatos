@@ -6,8 +6,7 @@ use App\Models\Time;
 use App\Models\Confronto;
 use Illuminate\Http\Request;
 
-class QuartasFinalController extends Controller
-{
+class QuartasFinalController extends Controller{
     public function gerarQuartas()
     {
         $times = Time::inRandomOrder()->get()->toArray();

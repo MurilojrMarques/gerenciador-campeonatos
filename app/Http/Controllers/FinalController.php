@@ -5,10 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Confronto;
 use Illuminate\Http\Request;
 
-class FinalController extends Controller
-{
-    public function gerarFinais($vencedoresSemifinal)
-    {
+class FinalController extends Controller{
+    public function gerarFinais($vencedoresSemifinal){
         if (count($vencedoresSemifinal) != 2) {
             throw new \Exception('Número de vencedores inválido para a final.');
         }
