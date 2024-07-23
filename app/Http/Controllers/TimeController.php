@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\QuartasFinalController;
+use App\Http\Controllers\SemifinalController;
+use App\Http\Controllers\FinalController;
 use App\Models\Time;
-use App\Models\Confronto;
 use Illuminate\Http\Request;
 
 class TimeController extends Controller
@@ -35,62 +37,20 @@ class TimeController extends Controller
 
     public function sortearConfrontos()
     {
-        try {
-            $times = Time::inRandomOrder()->get()->toArray();
+        // Instanciar os controladores de cada fase
+        $quartasFinalController = new QuartasFinalController();
+        $semifinalController = new SemifinalController();
+        $finalController = new FinalController();
 
-            $confrontos = [];
-            for ($i = 0; $i < count($times); $i += 2) {
-                $confrontos[] = [
-                    'time_casa' => $times[$i]['nome'],
-                    'time_visitante' => $times[$i + 1]['nome'],
-                ];
-            }
+        // Quartas de final
+        list($placaresQuartas, $vencedoresQuartas) = $quartasFinalController->gerarQuartas();
 
-            $placaresQuartas = $this->gerarPlacaresConfrontos($confrontos);
-            $this->salvarResultados($placaresQuartas);
-            $vencedores = $this->determinarVencedores($placaresQuartas);
+        // Semifinais
+        list($placaresSemifinal, $vencedoresSemifinal) = $semifinalController->gerarSemifinais($vencedoresQuartas);
 
-            return view('times.resultados', compact('placaresQuartas', 'vencedores'));
+        // Finais
+        list($placaresFinal, $vencedorFinal) = $finalController->gerarFinais($vencedoresSemifinal);
 
-        } catch (\Exception $exception) {
-            return back()->withError('Falha ao sortear confrontos. ' . $exception->getMessage());
-        }
-    }
-
-    private function gerarPlacaresConfrontos($confrontos)
-    {
-        $placares = [];
-        foreach ($confrontos as $confronto) {
-            $placares[] = [
-                'time_casa' => $confronto['time_casa'],
-                'time_visitante' => $confronto['time_visitante'],
-                'placar_casa' => mt_rand(0, 5), 
-                'placar_visitante' => mt_rand(0, 5),
-            ];
-        }
-        return $placares;
-    }
-
-    private function salvarResultados($placaresQuartas)
-    {
-        foreach ($placaresQuartas as $placar) {
-            Confronto::create([
-                'time_casa' => $placar['time_casa'],
-                'placar_casa' => $placar['placar_casa'],
-                'time_visitante' => $placar['time_visitante'],
-                'placar_visitante' => $placar['placar_visitante'],
-                'vencedor' => $placar['placar_casa'] > $placar['placar_visitante'] ? $placar['time_casa'] : $placar['time_visitante'],
-            ]);
-        }
-    }
-
-    private function determinarVencedores($placaresQuartas)
-    {
-        $vencedores = [];
-        foreach ($placaresQuartas as $placar) {
-            $vencedor = $placar['placar_casa'] > $placar['placar_visitante'] ? $placar['time_casa'] : $placar['time_visitante'];
-            $vencedores[] = $vencedor;
-        }
-        return $vencedores;
+        return view('times.resultados', compact('placaresQuartas', 'vencedoresQuartas', 'placaresSemifinal', 'vencedoresSemifinal', 'placaresFinal', 'vencedorFinal'));
     }
 }
