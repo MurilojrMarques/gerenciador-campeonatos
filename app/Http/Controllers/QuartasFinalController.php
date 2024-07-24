@@ -2,23 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Time;
 use App\Models\Confronto;
+use App\Models\Time;
 use Illuminate\Http\Request;
 
 class QuartasFinalController extends Controller
 {
-
-    public function gerarQuartas()
+    public function gerarQuartas($campeonato_id)
     {
-        if (Confronto::exists()) {
-            return redirect()->route('times.index')->with('error', 'Os confrontos já foram gerados.');
+        if (Confronto::where('campeonato_id', $campeonato_id)->where('fase', 'quartas')->exists()) {
+            return redirect()->route('times.index')->with('error', 'Os confrontos das quartas de final já foram gerados.');
         }
 
-
         $times = Time::inRandomOrder()->get()->toArray();
-
-
         $confrontos = [];
         for ($i = 0; $i < count($times); $i += 2) {
             $confrontos[] = [
@@ -27,16 +23,12 @@ class QuartasFinalController extends Controller
             ];
         }
 
-
         $placares = $this->gerarPlacaresConfrontos($confrontos);
-        $this->salvarResultados($placares);
-
+        $this->salvarResultados($placares, $campeonato_id);
 
         $vencedores = $this->determinarVencedores($placares);
-
         return [$placares, $vencedores];
     }
-
 
     private function gerarPlacaresConfrontos($confrontos)
     {
@@ -44,10 +36,9 @@ class QuartasFinalController extends Controller
         foreach ($confrontos as $confronto) {
             $placarCasa = mt_rand(0, 5);
             $placarVisitante = mt_rand(0, 5);
-            
 
             if ($placarCasa === $placarVisitante) {
-                $placarCasa += mt_rand(0, 1);
+                $placarCasa += mt_rand(1, 2);
             }
 
             $placares[] = [
@@ -60,8 +51,7 @@ class QuartasFinalController extends Controller
         return $placares;
     }
 
-
-    private function salvarResultados($placares)
+    private function salvarResultados($placares, $campeonato_id)
     {
         foreach ($placares as $placar) {
             Confronto::create([
@@ -70,10 +60,11 @@ class QuartasFinalController extends Controller
                 'time_visitante' => $placar['time_visitante'],
                 'placar_visitante' => $placar['placar_visitante'],
                 'vencedor' => $this->determinarVencedor($placar),
+                'campeonato_id' => $campeonato_id,
+                'fase' => 'quartas',
             ]);
         }
     }
-
 
     private function determinarVencedor($placar)
     {
@@ -83,10 +74,8 @@ class QuartasFinalController extends Controller
             return $placar['time_visitante'];
         }
 
-
         return mt_rand(0, 1) ? $placar['time_casa'] : $placar['time_visitante'];
     }
-
 
     private function determinarVencedores($placares)
     {
