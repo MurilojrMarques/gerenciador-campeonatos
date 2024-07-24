@@ -62,22 +62,15 @@
         @endforeach
     </div>
 
-    <!-- Disputa pelo Terceiro Lugar -->
+    <!-- Campeão -->
     <div class="bracket-column">
         <div class="block match-type">
-            Disputa pelo Terceiro Lugar
+           Campeão
         </div>
 
-        @if(isset($placarDisputaTerceiroLugar))
+        @if(isset($vencedorFinal))
         <div class="match">
-            <div class="block team">
-                {{ $placarDisputaTerceiroLugar['time_casa'] }}
-                <div class="score">{{ $placarDisputaTerceiroLugar['placar_casa'] }}</div>
-            </div>
-            <div class="block team">
-                {{ $placarDisputaTerceiroLugar['time_visitante'] }}
-                <div class="score">{{ $placarDisputaTerceiroLugar['placar_visitante'] }}</div>
-            </div>
+                <div class="block team">{{ $vencedorFinal }}</div>
         </div>
         @endif
     </div>

@@ -5,11 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chaveamento</title>
-    <!-- Link para o Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         .bracket {
-            font-family: 'Roboto', sans-serif; /* Aplica a fonte Roboto */
+            font-family: 'Roboto', sans-serif; 
             font-size: 11px;
             border: 2px solid black;
         }

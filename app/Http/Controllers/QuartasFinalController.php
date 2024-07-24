@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Confronto;
@@ -20,6 +19,8 @@ class QuartasFinalController extends Controller
             $confrontos[] = [
                 'time_casa' => $times[$i]['nome'],
                 'time_visitante' => $times[$i + 1]['nome'],
+                'time_casa_id' => $times[$i]['id'],
+                'time_visitante_id' => $times[$i + 1]['id'],
             ];
         }
 
@@ -37,15 +38,13 @@ class QuartasFinalController extends Controller
             $placarCasa = mt_rand(0, 5);
             $placarVisitante = mt_rand(0, 5);
 
-            if ($placarCasa === $placarVisitante) {
-                $placarCasa += mt_rand(1, 2);
-            }
-
             $placares[] = [
                 'time_casa' => $confronto['time_casa'],
                 'time_visitante' => $confronto['time_visitante'],
                 'placar_casa' => $placarCasa,
                 'placar_visitante' => $placarVisitante,
+                'time_casa_id' => $confronto['time_casa_id'],
+                'time_visitante_id' => $confronto['time_visitante_id'],
             ];
         }
         return $placares;
@@ -74,7 +73,7 @@ class QuartasFinalController extends Controller
             return $placar['time_visitante'];
         }
 
-        return mt_rand(0, 1) ? $placar['time_casa'] : $placar['time_visitante'];
+        return $placar['time_casa_id'] < $placar['time_visitante_id'] ? $placar['time_casa'] : $placar['time_visitante'];
     }
 
     private function determinarVencedores($placares)

@@ -1,9 +1,10 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use App\Models\Confronto;
 use Illuminate\Http\Request;
+use App\Models\Confronto;
+use App\Models\Campeonato;
+use App\Models\Time;
 
 class SemifinalController extends Controller
 {
@@ -42,10 +43,6 @@ class SemifinalController extends Controller
             $placarCasa = mt_rand(0, 5);
             $placarVisitante = mt_rand(0, 5);
 
-            if ($placarCasa === $placarVisitante) {
-                $placarCasa += mt_rand(1, 2);
-            }
-
             $placares[] = [
                 'time_casa' => $confronto['time_casa'],
                 'time_visitante' => $confronto['time_visitante'],
@@ -79,8 +76,28 @@ class SemifinalController extends Controller
             return $placar['time_visitante'];
         }
 
-        return mt_rand(0, 1) ? $placar['time_casa'] : $placar['time_visitante'];
+        return $this->resolverEmpate($placar);
     }
+
+    private function resolverEmpate($placar)
+    {
+        $timeCasaId = Time::where('nome', $placar['time_casa'])->value('id');
+        $timeVisitanteId = Time::where('nome', $placar['time_visitante'])->value('id');
+
+
+        $pontosCasa = $placar['placar_casa'] + (5 - $placar['placar_visitante']);
+        $pontosVisitante = $placar['placar_visitante'] + (5 - $placar['placar_casa']);
+
+        if ($pontosCasa > $pontosVisitante) {
+            return $placar['time_casa'];
+        } elseif ($pontosCasa < $pontosVisitante) {
+            return $placar['time_visitante'];
+        }
+
+
+        return $timeCasaId < $timeVisitanteId ? $placar['time_casa'] : $placar['time_visitante'];
+    }
+
 
     private function determinarVencedores($placares)
     {

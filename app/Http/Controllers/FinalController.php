@@ -63,6 +63,7 @@ class FinalController extends Controller
         $vencedor = [];
         foreach ($placares as $placar) {
             $vencedor = $placar['placar_casa'] > $placar['placar_visitante'] ? $placar['time_casa'] : $placar['time_visitante'];
+            
         }
         return $vencedor;
     }
