@@ -51,6 +51,20 @@ class TimeController extends Controller
     }
 
 
+public function delete($id)
+{
+    try {
+        $time = Time::findOrFail($id);
+        $time->delete();
+
+        return redirect()->route('times.index')->with('success', 'Time excluído com sucesso!');
+    } catch (\Exception $e) {
+        return redirect()->route('times.index')->with('error', 'Erro ao excluir o time.');
+    }
+}
+
+
+
     public function sortearConfrontos()
     {
         $totalTimes = Time::count();

@@ -9,3 +9,4 @@ Route::get('/times', [TimeController::class, 'index'])->name('times.index');
 Route::get('/times/create', [TimeController::class, 'create'])->name('times.create');
 Route::post('/times', [TimeController::class, 'store'])->name('times.store');
 Route::get('/times/sortear-confrontos', [TimeController::class, 'sortearConfrontos'])->name('times.sortear-confrontos');
+Route::delete('/times/{id}', [TimeController::class, 'delete'])->name('times.delete');

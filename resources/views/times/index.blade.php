@@ -1,5 +1,3 @@
-<!-- resources/views/times/index.blade.php -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +10,6 @@
     <div class="container mt-5">
         <h1 class="text-center">Times Cadastrados</h1>
 
-        <!-- Mensagens de Sucesso e Erro -->
         @if(session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
@@ -24,14 +21,22 @@
             </div>
         @endif
 
-        <!-- Lista de Times -->
         <ul class="list-group mt-3">
             @foreach($times as $time)
-                <li class="list-group-item">{{ $time->nome }}</li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ $time->nome }}
+                    
+
+                    <form action="{{ route('times.delete', $time->id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este time?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                    </form>
+                </li>
             @endforeach
         </ul>
 
-        <!-- Botões de Ação -->
+
         <div class="mt-4 text-center">
             @if(count($times) < 8)
                 <a href="{{ route('times.create') }}" class="btn btn-primary">Cadastrar Novos Times</a>
