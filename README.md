@@ -22,7 +22,7 @@ Para testes
 
 - git init 
 
-- git clone https://github.com/Petrocini/agendamento-consultas.git 
+- git clone https://github.com/MuriloJrMarques/gerenciador-campeonatos
 
 2 - Utilize o comando "composer install" na pasta do projeto clonado 
 
